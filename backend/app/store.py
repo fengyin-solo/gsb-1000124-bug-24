@@ -4,7 +4,10 @@
 """
 from __future__ import annotations
 
-from typing import Any
+import copy
+import threading
+from contextlib import contextmanager
+from typing import Any, Iterator
 
 from app.seed import SEED_ROWS
 
@@ -12,8 +15,28 @@ from app.seed import SEED_ROWS
 class Store:
     def __init__(self) -> None:
         self._tables: dict[str, list[dict[str, Any]]] = {
-            name: [dict(row) for row in rows] for name, rows in SEED_ROWS.items()
+            name: [self._prepare_row(dict(row)) for row in rows] for name, rows in SEED_ROWS.items()
         }
+        self._locks: dict[str, threading.RLock] = {
+            name: threading.RLock() for name in self._tables
+        }
+
+    @staticmethod
+    def _prepare_row(row: dict[str, Any]) -> dict[str, Any]:
+        row.setdefault("version", 1)
+        return row
+
+    @contextmanager
+    def transaction(self, module: str) -> Iterator[None]:
+        """串行化同一模块的写操作，避免并发动作交叉产生中间状态。"""
+        lock = self._locks.setdefault(module, threading.RLock())
+        with lock:
+            yield
+
+    @staticmethod
+    def snapshot(value: Any) -> Any:
+        """返回深拷贝，接口响应不会把调用方的临时修改写回仓库。"""
+        return copy.deepcopy(value)
 
     def module_names(self) -> list[str]:
         return sorted(self._tables)
@@ -26,6 +49,10 @@ class Store:
             if int(row.get("id", 0)) == entry_id:
                 return row
         return None
+
+    def find_copy(self, module: str, entry_id: int) -> dict[str, Any] | None:
+        row = self.find(module, entry_id)
+        return self.snapshot(row) if row is not None else None
 
     def overview(self) -> dict[str, object]:
         modules: list[dict[str, object]] = []

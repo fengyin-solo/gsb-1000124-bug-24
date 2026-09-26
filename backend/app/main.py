@@ -5,14 +5,25 @@
 """
 from __future__ import annotations
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from app.config import settings
+from app.errors import ConflictError
 from app.routers import ROUTERS
 from app.store import store
 
 app = FastAPI(title="实验室样品检测管理平台", version="1.0.0")
+
+
+@app.exception_handler(ConflictError)
+def conflict_handler(_: Request, exc: ConflictError) -> JSONResponse:
+    return JSONResponse(
+        status_code=409,
+        content={"detail": exc.message, "current": exc.current},
+    )
+
 
 app.add_middleware(
     CORSMiddleware,
