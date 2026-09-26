@@ -26,6 +26,10 @@ class EntryPayload(BaseModel):
 
     values: dict[str, Any] = Field(default_factory=dict)
     remark: str | None = None
+    # 乐观锁：客户端打开详情时拿到的版本号，不一致则返回 409 并附上当前内容。
+    expected_version: int | None = None
+    # 幂等键：同键重复提交（异常中断、网络重试、连点）只生效一次，其余回放首次结果。
+    request_key: str | None = None
 
 
 

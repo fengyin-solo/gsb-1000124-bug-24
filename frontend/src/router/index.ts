@@ -7,6 +7,7 @@ const Instrument = () => import('@/views/instrument/index.vue')
 const Calibration = () => import('@/views/calibration/index.vue')
 const Reagent = () => import('@/views/reagent/index.vue')
 const Result = () => import('@/views/result/index.vue')
+const ResultEntry = () => import('@/views/result/entry.vue')
 const Report = () => import('@/views/report/index.vue')
 const Qc = () => import('@/views/qc/index.vue')
 const Deviation = () => import('@/views/deviation/index.vue')
@@ -30,6 +31,8 @@ const router = createRouter({
     { path: '/calibration', name: 'calibration', component: Calibration },
     { path: '/reagent', name: 'reagent', component: Reagent },
     { path: '/result', name: 'result', component: Result },
+    { path: '/result/new', name: 'result-entry-create', component: ResultEntry },
+    { path: '/result/:id', name: 'result-entry-edit', component: ResultEntry },
     { path: '/report', name: 'report', component: Report },
     { path: '/qc', name: 'qc', component: Qc },
     { path: '/deviation', name: 'deviation', component: Deviation },

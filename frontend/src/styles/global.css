@@ -33,3 +33,14 @@ body { margin: 0; background: #f6f8fb; color: #1f2937; }
 .link { border: none; background: none; color: var(--brand); cursor: pointer; padding: 0; }
 .page-foot { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; color: var(--muted); }
 .error-text { color: #b42318; }
+.success-text { color: #067647; }
+.btn:disabled, .link:disabled { opacity: 0.55; cursor: not-allowed; }
+.filter-item select, .filter-item input { padding: 5px 8px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
+.entry-form { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 16px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; }
+.form-item span { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+.form-item input { width: 100%; padding: 6px 8px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
+.form-item input:disabled { background: #f1f5f9; color: var(--muted); }
+.detail-meta { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 16px; font-size: 13px; color: var(--muted); padding-bottom: 8px; border-bottom: 1px dashed var(--border); }
+.conflict-banner { grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 12px; align-items: center; background: #fffaeb; border: 1px solid #fedf89; color: #b54708; border-radius: 6px; padding: 8px 12px; font-size: 13px; }
+.form-foot { grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; }
+.foot-spacer { flex: 1; }
